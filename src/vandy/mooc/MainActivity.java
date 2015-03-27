@@ -58,11 +58,12 @@ public class MainActivity extends LifecycleLoggingActivity {
         // @@ TODO -- you fill in here.
 
         // Set the default layout.
-        // @@ TODO -- you fill in here.
+        setContentView(R.layout.main_activity);
 
         // Cache the EditText that holds the urls entered by the user
         // (if any).
-        // @@ TODO -- you fill in here.
+        mUrlEditText = (EditText) findViewById(R.id.url);
+
     }
 
     /**
@@ -82,13 +83,19 @@ public class MainActivity extends LifecycleLoggingActivity {
             // image from the URL given by the user.  In this case
             // it's an Intent that's implemented by the
             // DownloadImageActivity.
-            // @@ TODO - you fill in here.
+            Uri mURL = getUrl();
 
-            // Start the Activity associated with the Intent, which
-            // will download the image and then return the Uri for the
-            // downloaded image file via the onActivityResult() hook
-            // method.
-            // @@ TODO -- you fill in here.
+            if (mURL != null) {
+
+                Intent mIntent = makeDownloadImageIntent(mURL);
+
+                // Start the Activity associated with the Intent, which
+                // will download the image and then return the Uri for the
+                // downloaded image file via the onActivityResult() hook
+                // method.
+                startActivityForResult(mIntent, DOWNLOAD_IMAGE_REQUEST);
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -149,9 +156,9 @@ public class MainActivity extends LifecycleLoggingActivity {
      */
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
-    	// TODO -- you fill in here, replacing "false" with the proper
-    	// code.
-        return null;
+    	Intent mIntent = new Intent(this.getApplicationContext(), DownloadImageActivity.class);
+        mIntent.setData(url);
+        return mIntent;
     }
 
     /**
@@ -170,9 +177,8 @@ public class MainActivity extends LifecycleLoggingActivity {
 
         // Do a sanity check to ensure the URL is valid, popping up a
         // toast if the URL is invalid.
-        // @@ TODO -- you fill in here, replacing "true" with the
-        // proper code.
-        if (true)
+
+        if (URLUtil.isValidUrl(url.toString()))
             return url;
         else {
             Toast.makeText(this,
